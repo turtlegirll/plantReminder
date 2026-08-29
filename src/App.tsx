@@ -60,6 +60,13 @@ function App() {
     );
   }
 
+  function editPlant(id: number, updatedPlant: Partial<Plant>) {
+    setPlants((currentPlants) =>
+      currentPlants.map((plant) =>
+        plant.id === id ? { ...plant, ...updatedPlant } : plant
+      )
+    );
+  }
 
   return (
     <main className="min-h-screen p-8">
@@ -76,6 +83,7 @@ function App() {
             plant={plant}
             onWater={waterPlant}
             onDelete={removePlant}
+            onEdit={editPlant}
           />
         ))}
       </div>

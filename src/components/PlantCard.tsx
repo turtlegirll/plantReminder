@@ -1,3 +1,4 @@
+import { useState } from "react";
 import type { Plant } from "../types/plants"
 import { Trash2, Pencil, Droplets } from "lucide-react";
 
@@ -6,6 +7,7 @@ type Props = {
     plant: Plant,
     onWater: (id: number) => void;
     onDelete: (id: number) => void;
+    onEdit: (id: number, updatedPlant: Partial<Plant>) => void;
 }
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -46,10 +48,19 @@ function formatDayMonth(date: Date) {
 
 
 
-export function PlantCard({ plant, onWater, onDelete }: Props) {
+export function PlantCard({ plant, onWater, onDelete, onEdit }: Props) {
+    const [isEditing, setIsEditing] = useState(false);
+    const [editedName, setEditedName] = useState(plant.name);
+    const [editedWateringInterval, setEditedWateringInterval] = useState(plant.wateringIntervalDays);
+    const [editedLastWatered, setEditedLastWatered] = useState(plant.lastWatered);
 
     const nextWateringDay = getDaysUntilWatering(plant)
     const nextWateringDate = getNextWateringDate(plant)
+
+    const handleEdit = () => {
+        onEdit(plant.id,{name: editedName, wateringIntervalDays: editedWateringInterval, lastWatered: editedLastWatered});
+        setIsEditing(false);
+    }
 
     return (
 
@@ -62,6 +73,7 @@ export function PlantCard({ plant, onWater, onDelete }: Props) {
                     <div className="flex gap-3">
                         <button
                             className="btn btn-warning btn-square btn-sm"
+                            onClick={() => setIsEditing(true)}
                             aria-label={`Edit ${plant.name}`}
                         >
                             <Pencil size={18} />
@@ -77,6 +89,36 @@ export function PlantCard({ plant, onWater, onDelete }: Props) {
                     </div>
                 </div>
 
+                {isEditing ? (
+                    <div className="space-y-2">
+                        <input
+                            type="text"
+                            placeholder="Plant name"
+                            value={editedName}
+                            onChange={(e) => setEditedName(e.target.value)}
+                            className="input input-bordered input-sm w-full"
+                        />
+                        <input
+                            type="date"
+                            placeholder="Last watered"
+                            value={editedLastWatered}
+                            onChange={(e) => setEditedLastWatered(e.target.value)}
+                            className="input input-bordered input-sm w-full"
+                        />
+                        <input
+                            type="number"
+                            placeholder="Watering interval (days)"
+                            value={editedWateringInterval}
+                            onChange={(e) => setEditedWateringInterval(Number(e.target.value))}
+                            className="input input-bordered input-sm w-full"
+                        />
+                        <div className="flex gap-2">
+                            <button className="btn btn-sm btn-success" onClick={handleEdit}>Save</button>
+                            <button className="btn btn-sm btn-outline" onClick={() => setIsEditing(false)}>Cancel</button>
+                        </div>
+                    </div>
+                ) : (
+                    <>
                 <p className="text-sm opacity-70">
                     This plant should be watered approximately every {plant.wateringIntervalDays} days :)
                 </p>
@@ -86,7 +128,8 @@ export function PlantCard({ plant, onWater, onDelete }: Props) {
                 <p className="font-semibold">
                     Water in  {nextWateringDay} days (on {formatDayMonth(nextWateringDate)})
                 </p>
-
+                    </>
+                )}
                 <div className="card-actions mt-4">
                     <button className="btn btn-primary" onClick={() => onWater(plant.id)}>  <Droplets size={18} />Water</button>
 
