@@ -1,4 +1,6 @@
 import type { Plant } from "../types/plants"
+import { Trash2, Pencil, Droplets } from "lucide-react";
+
 
 type Props = {
     plant: Plant,
@@ -17,7 +19,7 @@ function getNextWateringDate(plant: Plant) {
     return nextDate;
 }
 
-function getDaysUntilWatering(plant: Plant){
+function getDaysUntilWatering(plant: Plant) {
 
     const lastWatered = new Date(plant.lastWatered);
 
@@ -33,8 +35,8 @@ function getDaysUntilWatering(plant: Plant){
     return difference;
 }
 
-function formatDayMonth(date: Date){
-    const formattedDate =  Intl.DateTimeFormat("de-DE", {
+function formatDayMonth(date: Date) {
+    const formattedDate = Intl.DateTimeFormat("de-DE", {
         day: "2-digit",
         month: "2-digit"
     }).format(date).replace(/\.$/, "");
@@ -49,24 +51,47 @@ export function PlantCard({ plant, onWater, onDelete }: Props) {
     const nextWateringDay = getDaysUntilWatering(plant)
     const nextWateringDate = getNextWateringDate(plant)
 
-
     return (
 
-        <article>
-            <h2>{plant.name}</h2>
+        <article className="card bg-base-200 shadow-md">
+            <div className="card-body">
+                <div className="flex items-start justify-between">
+                    <h2 className="card-title">
+                        {plant.name}
+                    </h2>
+                    <div className="flex gap-3">
+                        <button
+                            className="btn btn-warning btn-square btn-sm"
+                            aria-label={`Edit ${plant.name}`}
+                        >
+                            <Pencil size={18} />
+                        </button>
 
-            <p>
-                Last watered {(new Date(plant.lastWatered).toLocaleDateString("de-DE"))}
-            </p>
-            <p>
-                Water in  {nextWateringDay} days (on {formatDayMonth(nextWateringDate)})
-            </p>
-            <p>
-                This plant should be watered approximately every {plant.wateringIntervalDays} days :)
-            </p>
-            <button onClick={() => onWater(plant.id)}>Water</button>
-            <button onClick={() => onDelete(plant.id)}>Delete</button>
+                        <button
+                            className="btn btn-square btn-sm btn-error"
+                            onClick={() => onDelete(plant.id)}
+                            aria-label={`Delete ${plant.name}`}
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                    </div>
+                </div>
 
+                <p className="text-sm opacity-70">
+                    This plant should be watered approximately every {plant.wateringIntervalDays} days :)
+                </p>
+                <p>
+                    Last watered {(new Date(plant.lastWatered).toLocaleDateString("de-DE"))}
+                </p>
+                <p className="font-semibold">
+                    Water in  {nextWateringDay} days (on {formatDayMonth(nextWateringDate)})
+                </p>
+
+                <div className="card-actions mt-4">
+                    <button className="btn btn-primary" onClick={() => onWater(plant.id)}>  <Droplets size={18} />Water</button>
+
+                </div>
+            </div>
         </article>
     )
 }

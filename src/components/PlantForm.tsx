@@ -16,46 +16,65 @@ export function AddPlantForm({ onAdd }: Props) {
 
 
     return (
-        <form onSubmit={(event) => {
-            event.preventDefault();
-            const newPlant: Plant = {
-                id: Date.now(),
-                name: name,
-                wateringIntervalDays: wateringIntervalDays,
-                lastWatered: lastWatered,
-            };
+        <form className="mb-6 flex flex-wrap items-end gap-3 rounded-xl bg-base-200 p-4"
+            onSubmit={(event) => {
+                event.preventDefault();
+                const newPlant: Plant = {
+                    id: Date.now(),
+                    name: name,
+                    wateringIntervalDays: wateringIntervalDays,
+                    lastWatered: lastWatered,
+                };
 
-            onAdd(newPlant);
+                onAdd(newPlant);
 
-            setName("");
-            setWateringInterval(7);
+                setName("");
+                setWateringInterval(7);
 
 
-        }}>
-            <label> Plant name </label>
-            <input
-                value={name}
-                onChange={(event) => setName(event.target.value)}
-            />
+            }}>
 
-            <label>Last Watered</label>
-            <input
-                type="date"
-                value={lastWatered}
-                onChange={(event) => setLastWatered(event.target.value)}>
+            <label className="flex flex-col gap-1">
+                <span className="text-xs">Plant</span>
+                <input
+                    className="input input-bordered input-sm w-40"
+                    placeholder="Monstera"
+                    value={name}
+                    onChange={(event) => setName(event.target.value)}
+                />
+            </label>
 
-            </input>
+            <label className="flex flex-col gap-1">
+                <span className="text-xs">Last watered</span>
+                <input
+                    className="input input-bordered input-sm"
+                    type="date"
+                    value={lastWatered}
+                    onChange={(event) => setLastWatered(event.target.value)}
+                />
+            </label>
 
-            <label> Water every </label>
-            <input
-                type="number"
-                value={wateringIntervalDays}
-                onChange={(event) => setWateringInterval(Number(event.target.value))}
-            /> days
+            <label className="flex flex-col gap-1">
+                <span className="text-xs">Water every</span>
 
-            <button type="submit">Add Plant</button>
+                <div className="flex items-center gap-2">
+                    <input
+                        className="input input-bordered input-sm w-20"
+                        type="number"
+                        value={wateringIntervalDays}
+                        onChange={(event) =>
+                            setWateringInterval(Number(event.target.value))
+                        }
+                    />
+                    <span className="text-sm opacity-60">days</span>
+                </div>
+            </label>
+
+            <button className="btn btn-primary btn-sm" type="submit">
+                Add
+            </button>
+
         </form>
-
     )
 
 }

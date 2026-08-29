@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import type { Plant } from "./types/plants"
 import { PlantCard } from "./components/PlantCard";
 import { AddPlantForm } from "./components/PlantForm";
+
 const initialPlants: Plant[] = [
   {
     id: 1,
@@ -61,19 +62,24 @@ function App() {
 
 
   return (
-    <main>
-      <h1> My Plants</h1>
+    <main className="min-h-screen p-8">
+      <h1 className="text-5xl font-bold mb-8">
+        My Plants
+      </h1>
 
-      <AddPlantForm onAdd={addPlant}></AddPlantForm>
+      <AddPlantForm onAdd={addPlant} />
 
-      {plants.map((plant) => (<PlantCard
-        key={plant.id}
-        plant={plant}
-        onWater={waterPlant}
-        onDelete={removePlant}
-      ></PlantCard>))}
+      <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3 mt-8">
+        {plants.map((plant) => (
+          <PlantCard
+            key={plant.id}
+            plant={plant}
+            onWater={waterPlant}
+            onDelete={removePlant}
+          />
+        ))}
+      </div>
     </main>
-
 
   )
 }
