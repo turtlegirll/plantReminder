@@ -21,7 +21,7 @@ const initialPlants: Plant[] = [
     id: 3,
     name: "Ficus Benjamin",
     wateringIntervalDays: 12,
-    lastWatered: new Date("2026-08-23").toISOString(), 
+    lastWatered: new Date("2026-08-23").toISOString(),
   }
 ];
 
@@ -36,11 +36,7 @@ function App() {
     return JSON.parse(savedPlants);
   });
 
-
   useEffect(() => { localStorage.setItem("plants", JSON.stringify(plants)) })
-
-
-
 
   function waterPlant(id: number) {
 
@@ -57,6 +53,12 @@ function App() {
     )
   }
 
+  function removePlant(id: number){
+    setPlants((currentPlants)=>
+      currentPlants.filter((plant)=> plant.id !== id)
+    );
+  }
+
 
   return (
     <main>
@@ -68,6 +70,7 @@ function App() {
         key={plant.id}
         plant={plant}
         onWater={waterPlant}
+        onDelete={removePlant}
       ></PlantCard>))}
     </main>
 

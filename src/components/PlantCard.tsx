@@ -3,6 +3,7 @@ import type { Plant } from "../types/plants"
 type Props = {
     plant: Plant,
     onWater: (id: number) => void;
+    onDelete: (id: number) => void;
 }
 const MS_PER_DAY = 24 * 60 * 60 * 1000;
 
@@ -43,7 +44,7 @@ function formatDayMonth(date: Date){
 
 
 
-export function PlantCard({ plant, onWater }: Props) {
+export function PlantCard({ plant, onWater, onDelete }: Props) {
 
     const nextWateringDay = getDaysUntilWatering(plant)
     const nextWateringDate = getNextWateringDate(plant)
@@ -63,7 +64,8 @@ export function PlantCard({ plant, onWater }: Props) {
             <p>
                 This plant should be watered approximately every {plant.wateringIntervalDays} days :)
             </p>
-            <button onClick={() => onWater(plant.id)}></button>
+            <button onClick={() => onWater(plant.id)}>Water</button>
+            <button onClick={() => onDelete(plant.id)}>Delete</button>
 
         </article>
     )
