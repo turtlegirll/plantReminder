@@ -58,7 +58,7 @@ export function PlantCard({ plant, onWater, onDelete, onEdit }: Props) {
     const nextWateringDate = getNextWateringDate(plant)
 
     const handleEdit = () => {
-        onEdit(plant.id,{name: editedName, wateringIntervalDays: editedWateringInterval, lastWatered: editedLastWatered});
+        onEdit(plant.id, { name: editedName, wateringIntervalDays: editedWateringInterval, lastWatered: editedLastWatered });
         setIsEditing(false);
     }
 
@@ -119,19 +119,20 @@ export function PlantCard({ plant, onWater, onDelete, onEdit }: Props) {
                     </div>
                 ) : (
                     <>
-                <p className="text-sm opacity-70">
-                    This plant should be watered approximately every {plant.wateringIntervalDays} days :)
-                </p>
-                <p>
-                    Last watered {(new Date(plant.lastWatered).toLocaleDateString("de-DE"))}
-                </p>
-                <p className="font-semibold">
-                    Water in  {nextWateringDay} days (on {formatDayMonth(nextWateringDate)})
-                </p>
+                        <p className="text-sm opacity-70">
+                            This plant should be watered approximately every {plant.wateringIntervalDays} days :)
+                        </p>
+                        <p>
+                            Last watered {(new Date(plant.lastWatered).toLocaleDateString("de-DE"))}
+                        </p>
+                        <p className="font-semibold">
+                            Water in  {nextWateringDay} days (on {formatDayMonth(nextWateringDate)})
+                        </p>
                     </>
                 )}
                 <div className="card-actions mt-4">
-                    <button className="btn btn-primary" onClick={() => onWater(plant.id)}>  <Droplets size={18} />Water</button>
+                    <button className="btn btn-primary" onClick={() => onWater(plant.id)} disabled={isEditing}
+                    >  <Droplets size={18} />Water</button>
 
                 </div>
             </div>
