@@ -14,7 +14,6 @@ export function AddPlantForm({ onAdd }: Props) {
         new Date().toISOString().split("T")[0]
     );
 
-
     return (
         <form className="mb-6 flex flex-wrap items-end gap-3 rounded-xl bg-base-200 p-4"
             onSubmit={(event) => {
@@ -27,11 +26,8 @@ export function AddPlantForm({ onAdd }: Props) {
                 };
 
                 onAdd(newPlant);
-
                 setName("");
                 setWateringInterval(7);
-
-
             }}>
 
             <label className="flex flex-col gap-1">
