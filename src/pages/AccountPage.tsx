@@ -13,6 +13,7 @@ export function AccountPage() {
     const [ntfyTopic, setNtfyTopic] = useState("");
     const [message, setMessage] = useState("");
     const [loading, setLoading] = useState(false);
+    const [isResettingPassword, setIsResettingPassword] = useState(false);
 
     useEffect(() => {
         async function checkUser() {
@@ -127,6 +128,32 @@ export function AccountPage() {
         navigate("/");
     }
 
+    async function resetPassword() {
+        if (!email || isResettingPassword) {
+            setMessage("Please enter your email to reset your password.");
+            return;
+        }
+        setIsResettingPassword(true);
+
+        const redirectTo =
+            window.location.hostname === "localhost"
+                ? "http://localhost:5173/"
+                : "https://turtlegirll.github.io/plantReminder/";
+
+        const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo,
+        });
+
+        if (error) {
+            setMessage(error.message);
+            setIsResettingPassword(false);
+            return;
+        }
+
+        setMessage("Check your email for a password reset link.");
+        setIsResettingPassword(false);
+    }
+
     return (
         <main className="min-h-screen p-6">
             <div className="max-w-md mx-auto">
@@ -232,6 +259,22 @@ export function AccountPage() {
                                         onChange={(e) => setPassword(e.target.value)}
                                         autoComplete="current-password"
                                     />
+
+                                        <button
+                                            type="button"
+                                            className="btn btn-link px-0"
+                                            onClick={resetPassword}
+                                            disabled={isResettingPassword}
+                                        >
+                                            {isResettingPassword ? "Sending email, wait a little :)" : "Forgot password?"}
+
+                                        </button>
+
+                                        {message && (
+                                            <p className="text-sm mt-3">
+                                                {message}
+                                            </p>
+                                        )}
                                 </label>
 
                                 <div className="flex gap-2 mt-4">
@@ -252,11 +295,7 @@ export function AccountPage() {
                                     </button>
                                 </div>
 
-                                {message && (
-                                    <p className="text-sm mt-3">
-                                        {message}
-                                    </p>
-                                )}
+
                             </>
                         )}
                     </div>

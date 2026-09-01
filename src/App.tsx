@@ -4,24 +4,37 @@ import { PlantCard } from "./components/PlantCard";
 import { AddPlantForm } from "./components/PlantForm";
 import { sendNtfyNotification } from "./services/ntfy";
 import { supabase } from "./lib/supabase";
-import { Link, Route, Routes } from "react-router-dom";
+import {  Link, Route, Routes, useNavigate } from "react-router-dom";
 import { AccountPage } from "./pages/AccountPage.tsx";
 import { UserRound } from "lucide-react";
 import type { User } from "@supabase/supabase-js";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage.tsx";
 
 function PlantApp() {
   const [isAdded, setIsAdded] = useState(false);
   const [user, setUser] = useState<User | null>(null);
   const [plants, setPlants] = useState<Plant[]>([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
-    async function getUser() {
-      const { data: { user }
-      } = await supabase.auth.getUser();
-      setUser(user);
-    }
-    getUser();
-  }, []);
+   supabase.auth.getUser().then(({ data }) => {
+      setUser(data.user);
+    });
+
+    const {data} = supabase.auth.onAuthStateChange((event, session) => {
+      setUser(session?.user ?? null);
+
+      if (event === "PASSWORD_RECOVERY") {
+        //sessionStorage.setItem("passwordRecovery", "true");
+        navigate("/reset-password", { replace: true });      }
+    });
+
+    return () => {
+      data?.subscription?.unsubscribe();
+    };
+  }, [navigate]);
+
+
 
   useEffect(() => {
     async function loadPlants() {
@@ -147,6 +160,7 @@ function PlantApp() {
 
     if (error) {
       console.error("Error deleting plant from Supabase:", error);
+      return;
     }
 
     setPlants((currentPlants) =>
@@ -170,6 +184,7 @@ function PlantApp() {
 
     if (error) {
       console.error("Error updating plant in Supabase:", error);
+      return;
     }
 
     setPlants((currentPlants) =>
@@ -243,6 +258,10 @@ function App() {
     <Routes>
       <Route path="/" element={<PlantApp />} />
       <Route path="/account" element={<AccountPage />} />
+      <Route
+        path="/reset-password"
+        element={<ResetPasswordPage />}
+      />
     </Routes>
   );
 }
