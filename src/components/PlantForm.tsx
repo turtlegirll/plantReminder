@@ -13,7 +13,6 @@ export function AddPlantForm({ onAdd }: Props) {
     const [lastWatered, setLastWatered] = useState(
         new Date().toISOString().split("T")[0]
     );
-    const [ntfyTopic, setNtfyTopic] = useState("");
 
     return (
         <form className="mb-6 flex flex-wrap items-end gap-3 rounded-xl bg-base-200 p-4"
@@ -24,13 +23,11 @@ export function AddPlantForm({ onAdd }: Props) {
                     name: name,
                     wateringIntervalDays: wateringIntervalDays,
                     lastWatered: lastWatered,
-                    ntfyTopic: ntfyTopic || "",
                 };
 
                 onAdd(newPlant);
                 setName("");
                 setWateringInterval(7);
-                setNtfyTopic(ntfyTopic);
             }}>
 
             <label className="flex flex-col gap-1">
@@ -67,16 +64,6 @@ export function AddPlantForm({ onAdd }: Props) {
                     />
                     <span className="text-sm opacity-60">days</span>
                 </div>
-            </label>
-
-            <label className="flex flex-col gap-1">
-                <span className="text-xs">ntfy topic</span>
-                <input
-                    className="input input-bordered input-sm w-56"
-                    placeholder=""
-                    value={ntfyTopic}
-                    onChange={(event) => setNtfyTopic(event.target.value)}
-                />
             </label>
 
             <button className="btn btn-primary btn-sm" type="submit">
