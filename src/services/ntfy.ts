@@ -4,7 +4,12 @@ export async function sendNtfyNotification(
     title: string,
     message: string
 ) {
-    const response = await fetch(`https://ntfy.sh/${topic}`, {
+    const ntfyServer = import.meta.env.VITE_NTFY_SERVER;
+    if (!ntfyServer) {
+        throw new Error("VITE_NTFY_SERVER environment variable is not set");
+    }
+    
+    const response = await fetch(`${ntfyServer}/${topic}`, {
         method: "POST",
         body: message,
         headers: {

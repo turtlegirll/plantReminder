@@ -3,4 +3,5 @@ export type Plant = {
     name: string;
     wateringIntervalDays: number;
     lastWatered: string;
+    ntfyTopic?: string;
 }
