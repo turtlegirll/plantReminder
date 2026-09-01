@@ -2,9 +2,8 @@ import { useState } from "react";
 import type { Plant } from "../types/plants";
 
 type Props = {
-    onAdd: (plant: Plant) => void
+    onAdd: (plant: Plant) =>Promise<void>;
 }
-
 
 
 export function AddPlantForm({ onAdd }: Props) {
@@ -13,26 +12,51 @@ export function AddPlantForm({ onAdd }: Props) {
     const [lastWatered, setLastWatered] = useState(
         new Date().toISOString().split("T")[0]
     );
+    const [isAddingPlant, setIsAddingPlant] = useState(false);
+    const [isEmpty, setIsEmpty] = useState(false);
 
+    function isPlantValid() {
+        return (
+            name.trim() !== "" &&
+            wateringIntervalDays > 0 &&
+            lastWatered !== ""
+        );
+    }
+    async function handleAddPlant(event: React.FormEvent) {
+        event.preventDefault();
+
+        if (!name || !wateringIntervalDays || !lastWatered) {
+            setIsEmpty(true);
+            return;
+        }
+
+        if (isAddingPlant) {
+            return;
+        }
+
+        setIsAddingPlant(true);
+
+        const newPlant: Plant = {
+            id: Date.now(),
+            name: name,
+            wateringIntervalDays: wateringIntervalDays,
+            lastWatered: lastWatered,
+        };
+
+        try {
+            await onAdd(newPlant);
+            setName("");
+            setWateringInterval(7);
+        } finally {
+            setIsAddingPlant(false);
+        }
+    }
 
     return (
         <form className="mb-6 flex flex-wrap items-end gap-3 rounded-xl bg-base-200 p-4"
-            onSubmit={(event) => {
-                event.preventDefault();
-                const newPlant: Plant = {
-                    id: Date.now(),
-                    name: name,
-                    wateringIntervalDays: wateringIntervalDays,
-                    lastWatered: lastWatered,
-                };
-
-                onAdd(newPlant);
-
-                setName("");
-                setWateringInterval(7);
+            onSubmit={handleAddPlant}>
 
 
-            }}>
 
             <label className="flex flex-col gap-1">
                 <span className="text-xs">Plant</span>
@@ -70,7 +94,7 @@ export function AddPlantForm({ onAdd }: Props) {
                 </div>
             </label>
 
-            <button className="btn btn-primary btn-sm" type="submit">
+            <button className="btn btn-primary btn-sm" type="submit" disabled={!isPlantValid() || isAddingPlant} >
                 Add
             </button>
 
