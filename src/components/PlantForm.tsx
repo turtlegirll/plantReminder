@@ -13,7 +13,6 @@ export function AddPlantForm({ onAdd }: Props) {
         new Date().toISOString().split("T")[0]
     );
     const [isAddingPlant, setIsAddingPlant] = useState(false);
-    const [isEmpty, setIsEmpty] = useState(false);
 
     function isPlantValid() {
         return (
@@ -26,7 +25,6 @@ export function AddPlantForm({ onAdd }: Props) {
         event.preventDefault();
 
         if (!name || !wateringIntervalDays || !lastWatered) {
-            setIsEmpty(true);
             return;
         }
 
@@ -55,9 +53,6 @@ export function AddPlantForm({ onAdd }: Props) {
     return (
         <form className="mb-6 flex flex-wrap items-end gap-3 rounded-xl bg-base-200 p-4"
             onSubmit={handleAddPlant}>
-
-
-
             <label className="flex flex-col gap-1">
                 <span className="text-xs">Plant</span>
                 <input
