@@ -115,7 +115,7 @@ function PlantApp() {
     }
   }
 
-  async function addPlant(plant: Plant) {
+  async function addPlant(plant: Plant) { 
     if (!user) {
       console.error("No logged-in user");
       return;
