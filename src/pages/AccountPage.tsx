@@ -146,6 +146,32 @@ export function AccountPage() {
                                     <p className="font-semibold">{currentUser.email}</p>
                                 </div>
 
+                                <div className="card bg-base-200 shadow-sm">
+                                    <div className="card-body">
+                                        <h2 className="card-title text-lg">
+                                            Watering notifications
+                                        </h2>
+
+                                        <p className="text-sm opacity-80">
+                                            This app uses ntfy to send watering reminders to your phone.
+                                        </p>
+
+                                        <ol className="list-decimal list-inside space-y-2 text-sm">
+                                            <li>Install the ntfy app on your phone.</li>
+                                            <li>In ntfy, add [placeholder sorry] as your notification server</li>
+                                            <li>Create or subscribe to a topic with a unique name, for example my-plants-a8f3k2.</li>
+                                            <li>Enter the same topic name below and save your settings.</li>
+                                        </ol>
+
+                                        <div className="bg-base-300 rounded-lg p-4 mt-2">
+                                            <p className="text-sm opacity-70">
+                                                <strong className="text-base-content">Tip:</strong>{" "}
+                                                Your topic acts as the destination for your notifications.
+                                                Choose something unique and don't share it with other users.
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
                                 <label className="form-control">
                                     <span className="label-text mb-1">ntfy topic</span>
 
